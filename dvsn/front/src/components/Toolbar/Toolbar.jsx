@@ -13,7 +13,7 @@ import {
     Line,
     ActionBox,
     BtnMenu,
-    UsernameSpan
+    MenuItem
 } from './styles'
 
 export function Toolbar() {
@@ -47,7 +47,9 @@ export function Toolbar() {
             <ContainerMenu>
                 <PostProfileImage alt="" src={user.foto} />
                 <MenuProfile>
-                    <UsernameSpan onClick={() => menuAlterado(MenuStates.EDIT_PROFILE)}>{user.nomeCompleto}</UsernameSpan>
+                    <MenuItem onClick={() => menuAlterado(MenuStates.EDIT_PROFILE)}>{user.nomeCompleto}</MenuItem>
+                    <Line />
+                    <MenuItem onClick={() => menuAlterado(MenuStates.CHANGE_PASSWORD)}>alterar senha</MenuItem>
                     <Line />
                     <BtnLogout onClick={() => logout()}>Sair</BtnLogout>
                 </MenuProfile>

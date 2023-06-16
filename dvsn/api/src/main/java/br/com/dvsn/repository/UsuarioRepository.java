@@ -73,4 +73,12 @@ public class UsuarioRepository {
                     .executeUpdate();
         }
     }
+
+    @Transactional
+    public void alterarSenha(long idUsuario, String senha) {
+        entityManager.createNativeQuery("UPDATE usuario SET senha = :senha WHERE id = :id")
+                .setParameter("senha", StringHelper.md5(senha))
+                .setParameter("id", idUsuario)
+                .executeUpdate();
+    }
 }

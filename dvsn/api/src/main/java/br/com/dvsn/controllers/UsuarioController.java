@@ -47,7 +47,7 @@ public class UsuarioController extends BaseController {
                 return badRequest("Usuário não encontrado.");
 
             return ResponseEntity.ok(new UsuarioDto(usuario));
-        }catch(Exception ex) {
+        } catch (Exception ex) {
             return internalServerError(ex);
         }
     }
@@ -76,7 +76,7 @@ public class UsuarioController extends BaseController {
             }
             usuarioRepository.atualizar(usuario);
             return ResponseEntity.ok().build();
-        }catch(Exception ex) {
+        } catch (Exception ex) {
             return internalServerError(ex);
         }
     }
@@ -96,7 +96,28 @@ public class UsuarioController extends BaseController {
             }
 
             return new ResponseEntity(list, HttpStatus.OK);
-        } catch(Exception ex) {
+        } catch (Exception ex) {
+            return internalServerError(ex);
+        }
+    }
+
+    @PostMapping("usuario/alterar-senha")
+    public ResponseEntity alterarSenha(HttpServletRequest request, @RequestPart(required = false) String senha, @RequestPart(required = false) String confirmacao) {
+        try {
+            if (StringHelper.isNullOrEmpty(senha)) {
+                return badRequest("Informe a nova senha.");
+            }
+
+            if (!senha.equals(confirmacao)) {
+                return badRequest("As senhas não batem.");
+            }
+
+            var idUsuario = obterUsuarioLogado(request).getId();
+
+            usuarioRepository.alterarSenha(idUsuario, senha);
+
+            return ResponseEntity.ok().build();
+        } catch (Exception ex) {
             return internalServerError(ex);
         }
     }

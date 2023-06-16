@@ -3,7 +3,8 @@ import './App.css'
 import { useSelector } from 'react-redux'
 
 import { Toolbar, Footer } from '../'
-import { PostList, UserList, EditProfile, Hash, SecurityConfig } from '../../pages'
+import { PostList, UserList, EditProfile, Hash, SecurityConfig, ChangePassword } from '../../pages'
+
 import { MenuStates } from '../../utils/constants'
 
 export function App() {
@@ -22,7 +23,8 @@ export function App() {
         return <Hash />
       case MenuStates.SECURITY_CONFIG:
         return <SecurityConfig />
-
+      case MenuStates.CHANGE_PASSWORD:
+        return <ChangePassword />
     }
   }
 

