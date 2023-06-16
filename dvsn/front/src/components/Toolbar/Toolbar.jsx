@@ -1,7 +1,7 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { userChanged, menuChanged } from '../../store/actions'
-import { usuarioService } from '../../services'
+import { userChanged, menuChanged, securityConfigChanged } from '../../store/actions'
+import { usuarioService, adminService } from '../../services'
 import { MenuStates } from '../../utils'
 
 import {
@@ -21,6 +21,11 @@ export function Toolbar() {
     const { user, menu } = useSelector(state => state.appState)
 
     const dispatch = useDispatch()
+
+    useEffect(async () => {
+        const config = await adminService.getSecurityConfig()
+        dispatch(securityConfigChanged(config))
+    }, [])
 
     function logout() {
         usuarioService.logout()

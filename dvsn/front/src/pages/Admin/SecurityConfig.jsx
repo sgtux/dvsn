@@ -4,12 +4,14 @@ import { useDispatch } from 'react-redux'
 import { adminService } from '../../services'
 
 import { TextInput, SaveButton, ResetButton } from '../../components'
-import { Container, FieldName } from './styles'
+import { Container, FieldName, GroupField, FieldBox } from './styles'
 
-import { userChanged } from '../../store/actions'
+import { userChanged, securityConfigChanged } from '../../store/actions'
 
 export function SecurityConfig() {
 
+    const [xssPreventionEnabled, setXssPreventionEnabled] = useState(false)
+    const [sqlInjectionPreventionEnabled, setSqlInjectionPreventionEnabled] = useState(false)
     const [cookieHttpOnly, setCookieHttpOnly] = useState(false)
     const [cookieSecure, setCookieSecure] = useState(false)
     const [cookieDomain, setCookieDomain] = useState('')
@@ -21,11 +23,14 @@ export function SecurityConfig() {
     function refresh() {
         adminService.getSecurityConfig()
             .then(res => {
+                setXssPreventionEnabled(res.xssPreventionEnabled)
+                setSqlInjectionPreventionEnabled(res.sqlInjectionPreventionEnabled)
                 setCookieHttpOnly(res.cookieHttpOnly)
                 setCookieSecure(res.cookieSecure)
                 setCookieDomain(res.cookieDomain || '')
                 setSessionMinutes(res.sessionMinutes)
                 setTipoAutenticacao(res.tipoAutenticacao)
+                dispatch(securityConfigChanged(res))
             })
             .catch(err => {
                 console.log(err)
@@ -39,54 +44,61 @@ export function SecurityConfig() {
 
     function save() {
         adminService.updateSecurityConfig({
+            xssPreventionEnabled,
+            sqlInjectionPreventionEnabled,
             cookieHttpOnly,
             cookieSecure,
             cookieDomain,
             sessionMinutes: Number(sessionMinutes || 0),
             tipoAutenticacao
         })
-            .then(() => {
-                refresh()
-            })
+            .then(() => refresh())
             .catch(err => console.log(err))
     }
 
     function reset() {
         adminService.resetSecurityConfig()
-            .then(() => {
-                refresh()
-            })
+            .then(() => refresh())
             .catch(err => console.log(err))
     }
 
     return (
         <Container>
-            <div>
-                <FieldName>Http Only:</FieldName>
-                <input type="checkbox" checked={cookieHttpOnly} onChange={e => setCookieHttpOnly(e.target.checked)} />
-            </div>
-            <br />
-            <div>
-                <FieldName>Secure:</FieldName>
-                <input type="checkbox" checked={cookieSecure} onChange={e => setCookieSecure(e.target.checked)} />
-            </div>
-            <br />
-            <div>
-                <FieldName>Domínio:</FieldName>
-                <TextInput style={{ width: 200 }} value={cookieDomain} onChange={e => setCookieDomain(e.target.value)} />
-            </div>
-            <div>
+            <FieldBox>
+                <FieldName>Previnir XSS:</FieldName>
+                <input type="checkbox" checked={xssPreventionEnabled} onChange={e => setXssPreventionEnabled(e.target.checked)} />
+            </FieldBox>
+            <FieldBox>
+                <FieldName>Previnir SQL Injection:</FieldName>
+                <input type="checkbox" checked={sqlInjectionPreventionEnabled} onChange={e => setSqlInjectionPreventionEnabled(e.target.checked)} />
+            </FieldBox>
+            <GroupField>
+                <legend>Cookie</legend>
+                <FieldBox>
+                    <FieldName>Http Only:</FieldName>
+                    <input type="checkbox" checked={cookieHttpOnly} onChange={e => setCookieHttpOnly(e.target.checked)} />
+                </FieldBox>
+                <FieldBox>
+                    <FieldName>Secure:</FieldName>
+                    <input type="checkbox" checked={cookieSecure} onChange={e => setCookieSecure(e.target.checked)} />
+                </FieldBox>
+                <FieldBox>
+                    <FieldName>Domínio:</FieldName>
+                    <TextInput style={{ width: 200 }} value={cookieDomain} onChange={e => setCookieDomain(e.target.value)} />
+                </FieldBox>
+            </GroupField>
+            <FieldBox>
                 <FieldName>Tempo Sessão:</FieldName>
                 <TextInput style={{ width: 200 }} value={sessionMinutes} onChange={e => setSessionMinutes(e.target.value)} />
-            </div>
-            <div>
+            </FieldBox>
+            <FieldBox>
                 <FieldName>Tipo Autenticacao:</FieldName>
                 <select value={tipoAutenticacao} onChange={e => setTipoAutenticacao(e.target.value)}>
                     <option value="CookieBase64">Cookie Base64</option>
                     <option value="Jwt">Jwt</option>
                     <option value="TokenOpaco">Token Opaco</option>
                 </select>
-            </div>
+            </FieldBox>
             <br /><br />
             <ResetButton onClick={() => reset()}>Restaurar</ResetButton>
             <SaveButton onClick={() => save()}>Salvar</SaveButton>

@@ -56,13 +56,13 @@ export const TextInput = styled.input`
 
 export const ErrorMessage = styled.div`
     color: red;
-    align-text: center;
+    text-align: center;
     margin-top:10px;
 `
 
 export const SuccessMessage = styled.div`
     color: green;
-    align-text: center;
+    text-align: center;
     margin-top:10px;
 `
 
@@ -88,7 +88,7 @@ export const SaveButton = styled(CustomButton)`
 
 export const ResetButton = styled(CustomButton)`
     width: 200px;
-    background-color: white;
+    background-color: #ddd;
     color: #666;
     margin-left: 10px;
     margin-right: 10px;

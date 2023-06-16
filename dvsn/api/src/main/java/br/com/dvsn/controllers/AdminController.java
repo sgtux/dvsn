@@ -49,9 +49,6 @@ public class AdminController extends BaseController{
     @GetMapping("security-config")
     public ResponseEntity updateSecurityRuntimeConfig(HttpServletRequest request) {
 
-        if(!isAdmin(request))
-            return forbidden();
-
         var config = new SecurityRuntimeConfigDto(SecurityRuntimeConfig.getInstance());
 
         return ResponseEntity.ok(config);

@@ -1,6 +1,9 @@
 package br.com.dvsn.controllers;
 
 import br.com.dvsn.helpers.StringHelper;
+import br.com.dvsn.security.SecurityRuntimeConfig;
+import org.owasp.html.HtmlPolicyBuilder;
+import org.owasp.html.PolicyFactory;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -20,6 +23,8 @@ public class HelloController extends BaseController {
 
             if (StringHelper.isNullOrEmpty(nome))
                 sb.append("Informe o parâmetro 'nome' na url.");
+            else if(SecurityRuntimeConfig.getInstance().isXssPreventionEnabled())
+                sb.append("Olá ").append(sanitizarHtml(nome));
             else
                 sb.append("Olá ").append(nome);
 
@@ -30,5 +35,12 @@ public class HelloController extends BaseController {
         } catch(Exception ex) {
             return internalServerError(ex);
         }
+    }
+
+    private String sanitizarHtml(String html){
+        PolicyFactory policyFactory = new HtmlPolicyBuilder()
+                .allowElements("b", "h2")
+                .toFactory();
+        return policyFactory.sanitize(html);
     }
 }

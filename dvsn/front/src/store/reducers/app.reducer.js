@@ -4,7 +4,8 @@ import { storageService } from '../../services'
 
 const initialState = {
     user: storageService.getUser(),
-    menu: storageService.getCurrentMenu() || MenuStates.POSTS
+    menu: storageService.getCurrentMenu() || MenuStates.POSTS,
+    securityConfig: {}
 }
 
 export const appReducer = (state = initialState, action) => {
@@ -17,6 +18,8 @@ export const appReducer = (state = initialState, action) => {
             if (window.location.search !== '')
                 window.location.search = ''
             return { ...state, menu: action.payload }
+        case ActionTypes.SECURITY_CONFIG_CHANGED:
+            return { ...state, securityConfig: action.payload }
         default:
             return state
     }

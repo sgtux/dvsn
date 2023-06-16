@@ -85,4 +85,7 @@ openssl req -newkey rsa:2048 -nodes -keyout key.pem -x509 -days 365 -out certifi
         - Comentários dos posts
 
 ## TODO
-- Adicionar XSS em SVG e CSS
+- Prevenção de XSS configurável. **DONE**
+- Prevenção de SQL Injection configurável. **DONE**
+- Validar tipos de autenticação e adicionar Token Opaco.
+- Adicionar XSS em SVG e CSS.

@@ -17,6 +17,10 @@ public final class SecurityRuntimeConfig {
 
     private TipoAutenticacao tipoAutenticacao;
 
+    private boolean xssPreventionEnabled;
+
+    private boolean sqlInjectionPreventionEnabled;
+
     private SecurityRuntimeConfig() {
         sessionMinutes = 20;
         tipoAutenticacao = TipoAutenticacao.CookieBase64;
@@ -38,6 +42,8 @@ public final class SecurityRuntimeConfig {
         setCookieSecure(config.isCookieSecure());
         setSessionMinutes(config.getSessionMinutes());
         setTipoAutenticacao(config.getTipoAutenticacao());
+        setSqlInjectionPreventionEnabled(config.isSqlInjectionPreventionEnabled());
+        setXssPreventionEnabled(config.isXssPreventionEnabled());
     }
 
     public boolean isCookieHttpOnly() {
@@ -78,5 +84,21 @@ public final class SecurityRuntimeConfig {
 
     public void setTipoAutenticacao(TipoAutenticacao tipoAutenticacao) {
         this.tipoAutenticacao = tipoAutenticacao;
+    }
+
+    public boolean isXssPreventionEnabled() {
+        return xssPreventionEnabled;
+    }
+
+    public void setXssPreventionEnabled(boolean xssPreventionEnabled) {
+        this.xssPreventionEnabled = xssPreventionEnabled;
+    }
+
+    public boolean isSqlInjectionPreventionEnabled() {
+        return sqlInjectionPreventionEnabled;
+    }
+
+    public void setSqlInjectionPreventionEnabled(boolean sqlInjectionPreventionEnabled) {
+        this.sqlInjectionPreventionEnabled = sqlInjectionPreventionEnabled;
     }
 }

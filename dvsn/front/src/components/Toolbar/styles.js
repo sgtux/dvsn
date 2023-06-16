@@ -2,7 +2,6 @@ import styled from 'styled-components'
 
 export const Container = styled.div`
     display: flex;
-    flex-orientation: row;
     justify-content: space-between;
     text-align: end;
     height: 60px;
