@@ -10,7 +10,6 @@ public final class CookieHelper {
     public static void AddCookie(HttpServletResponse response, String chave, String valor) {
 
         var config = SecurityRuntimeConfig.getInstance();
-
         var cookie = new Cookie(chave, valor);
         cookie.setMaxAge(config.getSessionMinutes() * 60);
         cookie.setPath("/");
@@ -38,8 +37,18 @@ public final class CookieHelper {
     }
 
     public static void clearCookie(HttpServletResponse response, String chave) {
+
+        var config = SecurityRuntimeConfig.getInstance();
+
         var cookie = new Cookie(chave, "");
         cookie.setMaxAge(0);
+        cookie.setPath("/");
+        cookie.setHttpOnly(config.isCookieHttpOnly());
+        cookie.setSecure(config.isCookieSecure());
+
+        if(!StringHelper.isNullOrEmpty(config.getCookieDomain()))
+            cookie.setDomain(config.getCookieDomain());
+
         response.addCookie(cookie);
     }
 

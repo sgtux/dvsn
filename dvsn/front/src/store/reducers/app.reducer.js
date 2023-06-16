@@ -14,6 +14,8 @@ export const appReducer = (state = initialState, action) => {
             return { ...state, user: action.payload }
         case ActionTypes.MENU_CHANGED:
             storageService.setCurrentMenu(action.payload)
+            if (window.location.search !== '')
+                window.location.search = ''
             return { ...state, menu: action.payload }
         default:
             return state

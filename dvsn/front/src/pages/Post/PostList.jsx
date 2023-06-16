@@ -55,8 +55,10 @@ export function PostList() {
                 setFiltroResult(filtro || qsParam)
             })
             .catch(err => {
-                if ((err.response || {}).status === 401)
+                if ((err.response || {}).status === 401) {
                     dispatch(userChanged(null))
+                    return
+                }
                 console.log(err)
             })
     }

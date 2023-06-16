@@ -46,13 +46,13 @@ yarn build
 Main Class -> RootApplication.java
 
 ## Usuários disponíveis
-|Email|Hash Senha|Senha|Função|
-|-|-|-|
-|bob@mail.com|0acf4539a14b3aa27deeb4cbdf6e989f|1|
-|jimi@mail.com|061fba5bdfc076bb7362616668de87c8|2|
-|jim@mail.com|5f4dcc3b5aa765d61d8327deb882cf99|2|
-|amy@mail.com|d8578edf8458ce06fbc5bb76a58c5ca4|2|
-|janis@mail.com|202cb962ac59075b964b07152d234b70|2|
+|Email|Hash Senha|Senha|Admin|
+|-|-|-|-|
+|bob@mail.com|0acf4539a14b3aa27deeb4cbdf6e989f|michael|Sim|
+|jimi@mail.com|061fba5bdfc076bb7362616668de87c8|lovely|Não|
+|jim@mail.com|5f4dcc3b5aa765d61d8327deb882cf99|password|Não|
+|amy@mail.com|d8578edf8458ce06fbc5bb76a58c5ca4|qwerty|Não|
+|janis@mail.com|46f94c8de14fb36680850768ff1b7f2a|123qwe|Não|
 
 
 
@@ -61,3 +61,28 @@ Gerar certificado para o servidor apache2.
 ```sh
 openssl req -newkey rsa:2048 -nodes -keyout key.pem -x509 -days 365 -out certificate.pem
 ```
+
+## Assuntos abordados:
+
+- OWASP TOP 10
+- XSS
+- CSRF
+- Cookies (HttpOnly, Secure, SameSite)
+- Alguns cuidados com LocalStorage e SessionStorage
+- Como manter componentes/frameworks/libs seguras e atualizadas
+- Cabeçalhos CSP e X-Frame-Options
+
+## Vulnerabilidades
+- SQL Injection
+    - Login
+    - Pesquisa de usuários
+- XSS
+    - Reflected
+        - /hello?nome=Gabriel
+    - DOM
+        - Listagem de POSTS
+    - Stored
+        - Comentários dos posts
+
+## TODO
+- Adicionar XSS em SVG e CSS
