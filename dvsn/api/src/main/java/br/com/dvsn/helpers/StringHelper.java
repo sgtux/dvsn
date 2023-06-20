@@ -3,6 +3,8 @@ package br.com.dvsn.helpers;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.owasp.html.HtmlPolicyBuilder;
+import org.owasp.html.PolicyFactory;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -91,5 +93,12 @@ public final class StringHelper {
 
     public static boolean isNullOrEmpty(String value) {
         return value == null || value.isEmpty();
+    }
+
+    public static String sanitizarHtml(String html){
+        PolicyFactory policyFactory = new HtmlPolicyBuilder()
+                .allowElements("b", "h2")
+                .toFactory();
+        return policyFactory.sanitize(html);
     }
 }

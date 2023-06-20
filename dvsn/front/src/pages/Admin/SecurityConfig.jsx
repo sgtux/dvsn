@@ -11,6 +11,7 @@ import { userChanged, securityConfigChanged } from '../../store/actions'
 export function SecurityConfig() {
 
     const [xssPreventionEnabled, setXssPreventionEnabled] = useState(false)
+    const [xssStoredPreventionEnabled, setXssStoredPreventionEnabled] = useState(false)
     const [sqlInjectionPreventionEnabled, setSqlInjectionPreventionEnabled] = useState(false)
     const [cookieHttpOnly, setCookieHttpOnly] = useState(false)
     const [cookieSecure, setCookieSecure] = useState(false)
@@ -24,6 +25,7 @@ export function SecurityConfig() {
         adminService.getSecurityConfig()
             .then(res => {
                 setXssPreventionEnabled(res.xssPreventionEnabled)
+                setXssStoredPreventionEnabled(res.xssStoredPreventionEnabled)
                 setSqlInjectionPreventionEnabled(res.sqlInjectionPreventionEnabled)
                 setCookieHttpOnly(res.cookieHttpOnly)
                 setCookieSecure(res.cookieSecure)
@@ -45,6 +47,7 @@ export function SecurityConfig() {
     function save() {
         adminService.updateSecurityConfig({
             xssPreventionEnabled,
+            xssStoredPreventionEnabled,
             sqlInjectionPreventionEnabled,
             cookieHttpOnly,
             cookieSecure,
@@ -67,6 +70,10 @@ export function SecurityConfig() {
             <FieldBox>
                 <FieldName>Previnir XSS:</FieldName>
                 <input type="checkbox" checked={xssPreventionEnabled} onChange={e => setXssPreventionEnabled(e.target.checked)} />
+            </FieldBox>
+            <FieldBox>
+                <FieldName>Previnir XSS Armazenado:</FieldName>
+                <input type="checkbox" checked={xssStoredPreventionEnabled} onChange={e => setXssStoredPreventionEnabled(e.target.checked)} />
             </FieldBox>
             <FieldBox>
                 <FieldName>Previnir SQL Injection:</FieldName>

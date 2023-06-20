@@ -51,7 +51,11 @@ public class AuthenticationController extends BaseController {
     @PostMapping("login")
     public ResponseEntity<?> login(@RequestBody UsuarioDto usuarioDto, HttpServletResponse response) {
 
+        if(StringHelper.isNullOrEmpty(usuarioDto.getSenha()) || StringHelper.isNullOrEmpty(usuarioDto.getSenha()))
+            return new ResponseEntity("Informe email e senha.", HttpStatus.UNAUTHORIZED);
+
         try {
+
             var usuario = usuarioRepository.login(usuarioDto);
 
             if (usuario != null) {
@@ -71,7 +75,7 @@ public class AuthenticationController extends BaseController {
 
                 return new ResponseEntity(usuarioLogadoDto, HttpStatus.OK);
             }
-            return new ResponseEntity("Usuário ou senha inválidos", HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity("Email ou senha inválidos", HttpStatus.UNAUTHORIZED);
         }catch (Exception ex) {
             return internalServerError(ex);
         }

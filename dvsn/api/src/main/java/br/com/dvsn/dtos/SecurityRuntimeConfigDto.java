@@ -16,6 +16,8 @@ public class SecurityRuntimeConfigDto {
 
     private boolean xssPreventionEnabled;
 
+    private boolean xssStoredPreventionEnabled;
+
     private boolean sqlInjectionPreventionEnabled;
 
     public SecurityRuntimeConfigDto() { }
@@ -27,6 +29,7 @@ public class SecurityRuntimeConfigDto {
         sessionMinutes = config.getSessionMinutes();
         tipoAutenticacao = config.getTipoAutenticacao();
         xssPreventionEnabled = config.isXssPreventionEnabled();
+        xssStoredPreventionEnabled = config.isXssStoredPreventionEnabled();
         sqlInjectionPreventionEnabled = config.isSqlInjectionPreventionEnabled();
     }
 
@@ -76,6 +79,14 @@ public class SecurityRuntimeConfigDto {
 
     public void setXssPreventionEnabled(boolean xssPreventionEnabled) {
         this.xssPreventionEnabled = xssPreventionEnabled;
+    }
+
+    public boolean isXssStoredPreventionEnabled() {
+        return xssStoredPreventionEnabled;
+    }
+
+    public void setXssStoredPreventionEnabled(boolean xssStoredPreventionEnabled) {
+        this.xssStoredPreventionEnabled = xssStoredPreventionEnabled;
     }
 
     public boolean isSqlInjectionPreventionEnabled() {

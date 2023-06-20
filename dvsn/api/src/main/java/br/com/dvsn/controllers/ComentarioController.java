@@ -6,6 +6,7 @@ import br.com.dvsn.entities.Post;
 import br.com.dvsn.helpers.StringHelper;
 import br.com.dvsn.repository.ComentarioRepository;
 import br.com.dvsn.repository.PostRepository;
+import br.com.dvsn.security.SecurityRuntimeConfig;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -35,6 +36,9 @@ public class ComentarioController extends BaseController {
             if (StringHelper.isNullOrEmpty(comentarioDto.getTexto())) {
                 return badRequest("Texto é obrigatório");
             }
+
+            if(SecurityRuntimeConfig.getInstance().isXssStoredPreventionEnabled())
+                comentarioDto.setTexto(StringHelper.sanitizarHtml(comentarioDto.getTexto()));
 
             var usuario = usuarioRepository.buscarPorId(comentarioDto.getUsuarioId());
 

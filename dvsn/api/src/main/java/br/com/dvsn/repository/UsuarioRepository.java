@@ -30,10 +30,10 @@ public class UsuarioRepository {
         var config = SecurityRuntimeConfig.getInstance();
         Query query;
         if(config.isSqlInjectionPreventionEnabled())
-            query = entityManager.createNativeQuery("select * from usuario u where nome like :filtro", Usuario.class)
+            query = entityManager.createNativeQuery("select * from usuario u where concat(nome, sobrenome) like :filtro", Usuario.class)
                     .setParameter("filtro", "%" + filtro + "%");
          else
-            query = entityManager.createNativeQuery("select * from usuario u where nome like '%" + filtro + "%'", Usuario.class);
+            query = entityManager.createNativeQuery("select * from usuario u where concat(nome, sobrenome) like '%" + filtro + "%'", Usuario.class);
 
         return query.getResultList();
     }

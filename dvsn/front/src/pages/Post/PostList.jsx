@@ -49,10 +49,11 @@ export function PostList() {
 
     function atualizar(qsParam) {
         setShowNewPost(false)
-        postService.obterTodos(filtro || qsParam)
+        postService.obterTodos(qsParam)
             .then(res => {
                 setPosts(res)
-                setFiltroResult(securityConfig.xssPreventionEnabled ? DOMPurify.sanitize(filtro || qsParam) : filtro)
+                console.log({ qsParam, filtro, sinitized: DOMPurify.sanitize(filtro || qsParam) })
+                setFiltroResult(securityConfig.xssPreventionEnabled ? DOMPurify.sanitize(qsParam) : qsParam)
             })
             .catch(err => {
                 if ((err.response || {}).status === 401) {

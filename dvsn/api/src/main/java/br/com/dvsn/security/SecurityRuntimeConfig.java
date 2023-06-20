@@ -19,6 +19,8 @@ public final class SecurityRuntimeConfig {
 
     private boolean xssPreventionEnabled;
 
+    private boolean xssStoredPreventionEnabled;
+
     private boolean sqlInjectionPreventionEnabled;
 
     private SecurityRuntimeConfig() {
@@ -44,6 +46,7 @@ public final class SecurityRuntimeConfig {
         setTipoAutenticacao(config.getTipoAutenticacao());
         setSqlInjectionPreventionEnabled(config.isSqlInjectionPreventionEnabled());
         setXssPreventionEnabled(config.isXssPreventionEnabled());
+        setXssStoredPreventionEnabled(config.isXssStoredPreventionEnabled());
     }
 
     public boolean isCookieHttpOnly() {
@@ -92,6 +95,14 @@ public final class SecurityRuntimeConfig {
 
     public void setXssPreventionEnabled(boolean xssPreventionEnabled) {
         this.xssPreventionEnabled = xssPreventionEnabled;
+    }
+
+    public boolean isXssStoredPreventionEnabled() {
+        return xssStoredPreventionEnabled;
+    }
+
+    public void setXssStoredPreventionEnabled(boolean xssStoredPreventionEnabled) {
+        this.xssStoredPreventionEnabled = xssStoredPreventionEnabled;
     }
 
     public boolean isSqlInjectionPreventionEnabled() {
