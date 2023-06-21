@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 
-import { usuarioService } from '../../services'
+import { usuarioService, storageService } from '../../services'
 
 import { TextInput, ErrorMessage, CustomButton, SuccessMessage } from '../../components'
 import { Container, FieldName } from './styles'
@@ -34,12 +34,17 @@ export function EditProfile() {
         formData.append('nome', nome)
         formData.append('sobrenome', sobrenome)
         formData.append('imagem', file)
-        fetch(`/usuario/${user.id}`, { method: 'put', body: formData })
+        const headers = (storageService.getAuthHeaders() || {}).headers
+        fetch(`/usuario/${user.id}`, { method: 'put', body: formData, headers })
             .then(async res => {
                 if (res.status === 200) {
                     setSuccessMessage('Salvo com sucesso.')
                     usuarioService.getUserData()
-                        .then(res => dispatch(userChanged(res)))
+                        .then(res => {
+                            const user = res
+                            user.token = storageService.getUser().token
+                            dispatch(userChanged(user))
+                        })
                         .catch(err => console.log(err))
                 } else if (res.status === 400) {
                     const json = await res.json()
@@ -60,7 +65,7 @@ export function EditProfile() {
     return (
         <Container>
             <TextInput style={{ width: 200 }} value={nome} placeholder="Nome" onChange={e => setNome(e.target.value)} />
-            <TextInput style={{ width: 200 }} value={sobrenome} placeholder="Sobrenome" onChange={e => setSobrenome(e.target.value)} />            
+            <TextInput style={{ width: 200 }} value={sobrenome} placeholder="Sobrenome" onChange={e => setSobrenome(e.target.value)} />
             <div>
                 <FieldName>Foto:</FieldName>
                 <input type='file' style={{ marginTop: 20 }} onChange={e => setFile(e.target.files[0])} />

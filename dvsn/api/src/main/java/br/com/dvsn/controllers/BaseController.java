@@ -3,10 +3,8 @@ package br.com.dvsn.controllers;
 import br.com.dvsn.dtos.ResponseErrorDto;
 import br.com.dvsn.dtos.UsuarioLogadoDto;
 import br.com.dvsn.enums.TipoAutenticacao;
-import br.com.dvsn.helpers.Constantes;
-import br.com.dvsn.helpers.CookieHelper;
-import br.com.dvsn.helpers.JwtHelper;
-import br.com.dvsn.helpers.StringHelper;
+import br.com.dvsn.helpers.*;
+import br.com.dvsn.repository.SessaoRepository;
 import br.com.dvsn.repository.UsuarioRepository;
 import br.com.dvsn.security.SecurityRuntimeConfig;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -20,6 +18,9 @@ public class BaseController {
     @Autowired
     protected UsuarioRepository usuarioRepository;
 
+    @Autowired
+    protected SessaoRepository sessaoRepository;
+
     protected UsuarioLogadoDto obterUsuarioLogado(HttpServletRequest request) {
 
         var tipoAutenticacao = SecurityRuntimeConfig.getInstance().getTipoAutenticacao();
@@ -28,22 +29,32 @@ public class BaseController {
             return new UsuarioLogadoDto(usuario);
         }
 
-        var cookie = CookieHelper.getCookieValue(request, Constantes.AUTH_COOKIE_NAME);
-        if(cookie != null) {
-            try {
-                var userJson = StringHelper.fromBase64(cookie);
-                var usuarioLogado = StringHelper.fromJson(userJson, UsuarioLogadoDto.class);
+        if(tipoAutenticacao == TipoAutenticacao.CookieBase64) {
+            var cookie = CookieHelper.getCookieValue(request, Constantes.AUTH_COOKIE_NAME);
 
-                var usuarioDb = usuarioRepository.buscarPorId(usuarioLogado.getId());
+            if (cookie != null) {
+                try {
+                    var userJson = StringHelper.fromBase64(cookie);
+                    var usuarioLogado = StringHelper.fromJson(userJson, UsuarioLogadoDto.class);
 
-                if(usuarioDb != null)
-                    usuarioLogado.setFoto(usuarioDb.getFoto());
+                    var usuarioDb = usuarioRepository.buscarPorId(usuarioLogado.getId());
 
-                return usuarioLogado;
-            } catch (JsonProcessingException ex) {
-                System.err.println(ex);
+                    if (usuarioDb != null)
+                        usuarioLogado.setFoto(usuarioDb.getFoto());
+
+                    return usuarioLogado;
+                } catch (JsonProcessingException ex) {
+                    System.err.println(ex);
+                }
             }
         }
+
+        if(tipoAutenticacao == TipoAutenticacao.TokenOpaco) {
+            var sessao = TokenOpacoHelper.verificarSessao(request, sessaoRepository);
+            var usuario = usuarioRepository.buscarPorId(sessao.getUsuarioId());
+            return new UsuarioLogadoDto(usuario);
+        }
+
         return null;
     }
 

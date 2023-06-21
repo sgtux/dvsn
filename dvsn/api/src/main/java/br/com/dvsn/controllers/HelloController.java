@@ -38,13 +38,9 @@ public class HelloController extends BaseController {
             else
                 sb.append("Olá ").append(nome);
 
-            sb.append("<br />");
-            sb.append("<input type='password' />");
-
-            var cssInjection = "<a id='a1'>Click me</a>\n" +
-                    "<script>\n" +
+            var cssInjection = "<script>\n" +
                     "if (location.hash.slice(1)) {\n" +
-                    "document.getElementById('a1').style.cssText = 'color: ' + location.hash.slice(1);\n" +
+                    "document.getElementById('div').style.cssText = 'color: ' + location.hash.slice(1);\n" +
                     "}\n" +
                     "</script>";
 

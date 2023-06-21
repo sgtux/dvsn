@@ -2,6 +2,7 @@ package br.com.dvsn.security;
 
 import br.com.dvsn.auth.filters.CookieBase64AuthenticationFilter;
 import br.com.dvsn.auth.filters.JwtAuthenticationFilter;
+import br.com.dvsn.auth.filters.TokenOpacoAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,13 +23,15 @@ public class SecurityConfiguration {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
+    private final TokenOpacoAuthenticationFilter tokenOpacoAuthenticationFilter;
+
     private final AuthenticationProvider authenticationProvider;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .authorizeHttpRequests()
-                .requestMatchers("/auth/**", "/", "/index.html", "/static/**", "/fontawesome/**", "/image/**")
+                .requestMatchers("/auth/**", "/", "/favicon.ico", "/index.html", "/static/**", "/fontawesome/**", "/image/**")
                 .permitAll()
                 .anyRequest()
                 .authenticated()
@@ -42,6 +45,7 @@ public class SecurityConfiguration {
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(cookieBase64AuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(jwtAuthenticationFilter, CookieBase64AuthenticationFilter.class)
+                .addFilterBefore(tokenOpacoAuthenticationFilter, JwtAuthenticationFilter.class)
                 .exceptionHandling()
                 .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED));
 

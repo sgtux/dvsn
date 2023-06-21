@@ -23,8 +23,12 @@ export function Toolbar() {
     const dispatch = useDispatch()
 
     useEffect(async () => {
-        const config = await adminService.getSecurityConfig()
-        dispatch(securityConfigChanged(config))
+        try {
+            const config = await adminService.getSecurityConfig()
+            dispatch(securityConfigChanged(config))
+        } catch (ex) {
+            console.log(ex)
+        }
     }, [])
 
     function logout() {

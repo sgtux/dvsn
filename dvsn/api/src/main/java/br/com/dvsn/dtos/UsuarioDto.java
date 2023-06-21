@@ -16,6 +16,8 @@ public class UsuarioDto {
 
     private String foto;
 
+    private int funcao;
+
     private String senha;
 
     private Date criadoEm;
@@ -30,6 +32,7 @@ public class UsuarioDto {
         sobrenome = usuario.getSobrenome();
         email = usuario.getEmail();
         foto = usuario.getFoto();
+        funcao = usuario.getFuncao();
         senha = usuario.getSenha();
         criadoEm = usuario.getCriadoEm();
         atualizadoEm = usuario.getAtualizadoEm();
@@ -107,5 +110,13 @@ public class UsuarioDto {
 
     public void setFoto(String foto) {
         this.foto = foto;
+    }
+
+    public int getFuncao() {
+        return funcao;
+    }
+
+    public void setFuncao(int funcao) {
+        this.funcao = funcao;
     }
 }

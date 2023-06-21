@@ -1,6 +1,7 @@
 DROP TABLE IF EXISTS comentario;
 DROP TABLE IF EXISTS post;
 DROP TABLE IF EXISTS usuario;
+DROP TABLE IF EXISTS sessao;
 
 CREATE TABLE usuario (
     id SERIAL PRIMARY KEY,
@@ -30,6 +31,14 @@ CREATE TABLE comentario (
     criado_em TIMESTAMP NOT NULL,
     usuario_id INT CONSTRAINT fk_comentario_usuario REFERENCES usuario (id),
     post_id INT CONSTRAINT fk_comentario_post REFERENCES post (id)
+);
+
+CREATE TABLE sessao (
+    id SERIAL PRIMARY KEY,
+    token VARCHAR(200) NOT NULL,
+    expira_em TIMESTAMP NOT NULL,
+    ativo BOOLEAN,
+    usuario_id INT CONSTRAINT fk_comentario_usuario REFERENCES usuario (id)
 );
 
 INSERT INTO usuario (nome, sobrenome, email, senha, foto, funcao, criado_em, atualizado_em) VALUES
